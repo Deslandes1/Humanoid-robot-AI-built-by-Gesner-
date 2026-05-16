@@ -61,10 +61,9 @@ def load_voice_cache():
         return cache
     return {}
 
-# ---------- DEFAULT TRAINING FACTS (Ti Malice + Creole levels) ----------
+# ---------- DEFAULT TRAINING FACTS ----------
 def get_default_training_facts():
     return [
-        # Ti Malice software book
         "Ti Malice se yon lojisyèl edikatif ki anseye timoun yo Kreyòl Ayisyen atravè jwèt ak istwa.",
         "Ti Malice gen yon liv ki rele 'Ti Malice aprann Kreyòl' ki gen 12 chapit.",
         "Chapit 1 Ti Malice: Alfabè kreyòl la ak pwononsyasyon.",
@@ -82,7 +81,6 @@ def get_default_training_facts():
         "Ti Malice gen yon seksyon egzèsis ki gen 50 kesyon pou pratike.",
         "Ou ka telechaje Ti Malice sou sitwèb globalinternet.py.",
         "Ti Malice fèt pa Gesner Deslandes pou ede timoun Ayisyen aprann Kreyòl fasilman.",
-        # Beginner Creole
         "Alfabè kreyòl la gen 32 lèt.",
         "Pwonon pèsonèl an Kreyòl: Mwen, ou, li, nou, yo.",
         "Vèb 'se' (to be) nan prezan: Mwen se, ou se, li se, nou se, yo se.",
@@ -91,14 +89,12 @@ def get_default_training_facts():
         "Kesyon debaz: Kijan ou ye? (How are you?), Mwen byen (I'm fine), Mèsi (Thank you), Pa dekwa (You're welcome).",
         "Nonm 1-10: youn, de, twa, kat, senk, sis, sèt, uit, nèf, dis.",
         "Koulè debaz: wouj (red), ble (blue), vèt (green), jòn (yellow), nwa (black), blan (white).",
-        # Intermediate Creole
         "Tan pase (past tense): yo itilize 'te' devan vèb. Egzanp: Mwen te manje (I ate).",
         "Tan kap vini (future tense): yo itilize 'ap' oswa 'pral'. Egzanp: Mwen ap manje (I will eat).",
         "Nègasyon (negation): yo itilize 'pa' apre vèb. Egzanp: Mwen pa manje (I don't eat).",
         "Pwopozisyon komen: nan (in), sou (on), anba (under), devan (in front of), dèyè (behind), bò (beside).",
         "Fraz konplèks: Itilize 'ki' (that/which), 'kote' (where), 'poukisa' (why).",
         "Vèb modèl: vle (to want), kapab (can), dwe (must), konnen (to know), fè (to do/make).",
-        # Advanced Creole
         "Pawòl konpoze (compound words): pote + chay = potechay (backpack), bwa + chemen = bwachemen (forest path).",
         "Pwovèb Kreyòl popilè: 'Dèyè mòn gen mòn' (Beyond mountains there are mountains - life is full of challenges).",
         "Pwovèb: 'Men anpil, chay pa lou' (Many hands make light work).",
@@ -125,7 +121,7 @@ def initialize_default_training():
 # ---------- STREAMLIT PAGE CONFIG ----------
 st.set_page_config(page_title="Gesner AI", page_icon="🧠", layout="wide")
 
-# ---------- CSS (dark theme + spinning glow brain) ----------
+# ---------- CSS ----------
 st.markdown(
     """
     <style>
@@ -276,7 +272,6 @@ LANGUAGES = {
     "Español": "es"
 }
 
-# Minimal TEXTS (replace with your full strings)
 TEXTS = {
     "en": {
         "app_title": "Gesner AI - Kreyòl Assistant",
@@ -633,18 +628,17 @@ def render_audio_player():
             st.audio(data, format=mime)
         st.session_state.play_audio = None
 
-# ---------- HUMANOYID ROBOT PAGE (Three.js scene) ----------
+# ---------- REALISTIC HUMANOID ROBOT PAGE (with expressions) ----------
 def humanoid_robot_page():
     st.markdown("## 🤖 GlobalInternet.py Humanoid Robot")
-    st.markdown("*Meet our industrial robot – built by Gesner Deslandes to showcase automation and AI.*")
+    st.markdown("*A realistic humanoid robot that speaks, blinks, and gestures – created by Gesner Deslandes*")
     
-    # HTML/JS code using Three.js to render a brown humanoid robot in an industrial environment
     robot_html = """
     <!DOCTYPE html>
     <html>
     <head>
         <style>
-            body { margin: 0; overflow: hidden; font-family: Arial, Helvetica, sans-serif; }
+            body { margin: 0; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
             #info {
                 position: absolute;
                 top: 20px;
@@ -656,6 +650,7 @@ def humanoid_robot_page():
                 pointer-events: none;
                 z-index: 100;
                 font-size: 14px;
+                backdrop-filter: blur(5px);
             }
             #company {
                 position: absolute;
@@ -668,6 +663,57 @@ def humanoid_robot_page():
                 font-size: 12px;
                 pointer-events: none;
                 z-index: 100;
+                backdrop-filter: blur(5px);
+            }
+            #speech-bubble {
+                position: absolute;
+                bottom: 120px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: white;
+                color: #1a1a2e;
+                padding: 12px 20px;
+                border-radius: 30px;
+                font-size: 16px;
+                font-weight: bold;
+                max-width: 80%;
+                text-align: center;
+                pointer-events: none;
+                z-index: 200;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+                border: 2px solid #ffaa33;
+                transition: opacity 0.3s;
+                font-family: inherit;
+            }
+            .speech-arrow {
+                position: absolute;
+                bottom: -10px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 0;
+                height: 0;
+                border-left: 10px solid transparent;
+                border-right: 10px solid transparent;
+                border-top: 10px solid white;
+            }
+            button {
+                position: absolute;
+                bottom: 30px;
+                right: 30px;
+                background: #e94560;
+                color: white;
+                border: none;
+                border-radius: 30px;
+                padding: 10px 20px;
+                font-weight: bold;
+                cursor: pointer;
+                z-index: 200;
+                font-family: inherit;
+                transition: transform 0.2s;
+            }
+            button:hover {
+                transform: scale(1.05);
+                background: #ff6b6b;
             }
         </style>
     </head>
@@ -679,8 +725,12 @@ def humanoid_robot_page():
         <div id="company">
             🌐 GlobalInternet.py – AI Education • Software Development • Industrial Robotics
         </div>
+        <div id="speech-bubble">
+            <span id="speech-text">Hello! I am Gesner AI Robot.</span>
+            <div class="speech-arrow"></div>
+        </div>
+        <button id="speakBtn">🗣️ Make Robot Speak</button>
         
-        <!-- Import Three.js core and add-ons -->
         <script type="importmap">
             {
                 "imports": {
@@ -695,21 +745,20 @@ def humanoid_robot_page():
             import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
             import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 
-            // --- Setup Scene, Cameras, Renderers ---
+            // --- Setup Scene ---
             const scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x111122); // industrial dark blue-gray
-            scene.fog = new THREE.FogExp2(0x111122, 0.008);
+            scene.background = new THREE.Color(0x0a0a2a);
+            scene.fog = new THREE.FogExp2(0x0a0a2a, 0.008);
 
             const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.set(5, 3, 6);
-            camera.lookAt(0, 1, 0);
+            camera.position.set(3, 2, 4);
+            camera.lookAt(0, 1.2, 0);
 
             const renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.shadowMap.enabled = true;
             document.body.appendChild(renderer.domElement);
 
-            // CSS2DRenderer for text labels
             const labelRenderer = new CSS2DRenderer();
             labelRenderer.setSize(window.innerWidth, window.innerHeight);
             labelRenderer.domElement.style.position = 'absolute';
@@ -718,244 +767,349 @@ def humanoid_robot_page():
             labelRenderer.domElement.style.pointerEvents = 'none';
             document.body.appendChild(labelRenderer.domElement);
 
-            // --- Controls for interactivity ---
+            // Controls
             const controls = new OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
             controls.autoRotate = false;
             controls.enableZoom = true;
-            controls.target.set(0, 1.5, 0);
+            controls.target.set(0, 1.2, 0);
 
             // --- Lighting ---
-            // Ambient light
             const ambientLight = new THREE.AmbientLight(0x404060);
             scene.add(ambientLight);
-            // Main directional light (sun)
-            const dirLight = new THREE.DirectionalLight(0xffffff, 1);
-            dirLight.position.set(5, 10, 3);
-            dirLight.castShadow = true;
-            dirLight.receiveShadow = true;
-            dirLight.shadow.mapSize.width = 1024;
-            dirLight.shadow.mapSize.height = 1024;
-            scene.add(dirLight);
-            // Fill light from below
+            const mainLight = new THREE.DirectionalLight(0xffffff, 1);
+            mainLight.position.set(3, 5, 2);
+            mainLight.castShadow = true;
+            mainLight.receiveShadow = true;
+            scene.add(mainLight);
             const fillLight = new THREE.PointLight(0x8866cc, 0.3);
-            fillLight.position.set(0, -1, 0);
+            fillLight.position.set(0, 1, 1);
             scene.add(fillLight);
-            // Back rim light
-            const rimLight = new THREE.PointLight(0xffaa66, 0.5);
-            rimLight.position.set(-2, 2, -3);
-            scene.add(rimLight);
-            // Industrial red warning light (flashing)
-            const warningLight = new THREE.PointLight(0xff3300, 0.8);
-            warningLight.position.set(2, 1.5, 2);
-            scene.add(warningLight);
-
-            // --- Industrial environment: floor grid, conveyor belt, moving boxes, gears ---
+            const backLight = new THREE.PointLight(0xffaa66, 0.5);
+            backLight.position.set(-1, 1.5, -2);
+            scene.add(backLight);
             
-            // Floor grid
-            const gridHelper = new THREE.GridHelper(20, 20, 0x88aaff, 0x335588);
-            gridHelper.position.y = -0.8;
+            // --- Industrial floor and environment ---
+            const gridHelper = new THREE.GridHelper(12, 20, 0x88aaff, 0x335588);
+            gridHelper.position.y = -0.9;
             scene.add(gridHelper);
-            
-            // Ground plane (invisible but receives shadow)
             const groundPlane = new THREE.Mesh(
-                new THREE.PlaneGeometry(15, 15),
-                new THREE.ShadowMaterial({ opacity: 0.4, color: 0x000000, transparent: true })
+                new THREE.PlaneGeometry(10, 10),
+                new THREE.ShadowMaterial({ opacity: 0.5, color: 0x000000, transparent: true })
             );
             groundPlane.rotation.x = -Math.PI / 2;
-            groundPlane.position.y = -0.79;
+            groundPlane.position.y = -0.89;
             groundPlane.receiveShadow = true;
             scene.add(groundPlane);
             
-            // Conveyor belt (long box)
-            const conveyorMat = new THREE.MeshStandardMaterial({ color: 0x555555, roughness: 0.7, metalness: 0.8 });
-            const conveyor = new THREE.Mesh(new THREE.BoxGeometry(4, 0.1, 1.5), conveyorMat);
-            conveyor.position.set(2, -0.5, 1.5);
-            conveyor.castShadow = true;
-            conveyor.receiveShadow = true;
-            scene.add(conveyor);
+            // Simple industrial props
+            const pillarMat = new THREE.MeshStandardMaterial({ color: 0x88aacc, metalness: 0.8 });
+            const pillar = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.3, 2, 6), pillarMat);
+            pillar.position.set(2.5, -0.2, -2);
+            pillar.castShadow = true;
+            scene.add(pillar);
+            const gearMat = new THREE.MeshStandardMaterial({ color: 0xccaa77, metalness: 0.6 });
+            const gear = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 0.15, 24), gearMat);
+            gear.position.set(-2, 0, -2);
+            gear.castShadow = true;
+            scene.add(gear);
             
-            // Moving boxes on conveyor
-            const boxMat = new THREE.MeshStandardMaterial({ color: 0xaa8866, roughness: 0.4 });
-            const movingBox = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.6, 0.6), boxMat);
-            movingBox.castShadow = true;
-            movingBox.position.set(2, -0.2, 1.5);
-            scene.add(movingBox);
-            
-            // Rotating gear 1
-            const gearMat = new THREE.MeshStandardMaterial({ color: 0xccaa77, metalness: 0.7, roughness: 0.3 });
-            const gearGeom = new THREE.CylinderGeometry(0.6, 0.6, 0.2, 24);
-            const gear1 = new THREE.Mesh(gearGeom, gearMat);
-            gear1.position.set(-2.5, -0.4, -1.8);
-            gear1.castShadow = true;
-            scene.add(gear1);
-            
-            // Rotating gear 2
-            const gear2 = new THREE.Mesh(gearGeom, gearMat);
-            gear2.position.set(-1, -0.4, -2.2);
-            gear2.castShadow = true;
-            scene.add(gear2);
-            
-            // Industrial pipes / cylinders
-            const pipeMat = new THREE.MeshStandardMaterial({ color: 0x88aacc, metalness: 0.9 });
-            const pipe = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 2, 8), pipeMat);
-            pipe.position.set(3, -0.2, -2);
-            pipe.castShadow = true;
-            scene.add(pipe);
-            
-            // --- Humanoid Robot (brown, constructed from primitives) ---
+            // --- Humanoid Robot Model (realistic human-like) ---
             const robotGroup = new THREE.Group();
             
-            // Body (torso)
-            const torsoMat = new THREE.MeshStandardMaterial({ color: 0x8B5A2B, roughness: 0.4, metalness: 0.2 }); // brown
-            const torso = new THREE.Mesh(new THREE.BoxGeometry(1.2, 1.5, 0.8), torsoMat);
+            // Torso (human-like shape, slightly padded)
+            const torsoGeom = new THREE.CylinderGeometry(0.55, 0.5, 1.1, 12);
+            const torsoMat = new THREE.MeshStandardMaterial({ color: 0xDEB887, roughness: 0.4, metalness: 0.1 }); // skin tone
+            const torso = new THREE.Mesh(torsoGeom, torsoMat);
             torso.castShadow = true;
             torso.receiveShadow = true;
-            torso.position.y = 0.75;
+            torso.position.y = 0.6;
             robotGroup.add(torso);
             
-            // Head
-            const headMat = new THREE.MeshStandardMaterial({ color: 0xA56B2F, roughness: 0.3 });
-            const head = new THREE.Mesh(new THREE.SphereGeometry(0.6, 32, 32), headMat);
-            head.position.y = 1.6;
+            // Neck
+            const neckMat = new THREE.MeshStandardMaterial({ color: 0xDEB887 });
+            const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.22, 0.2, 8), neckMat);
+            neck.position.y = 1.15;
+            neck.castShadow = true;
+            robotGroup.add(neck);
+            
+            // Head (more realistic sphere)
+            const headMat = new THREE.MeshStandardMaterial({ color: 0xDEB887, roughness: 0.3 });
+            const head = new THREE.Mesh(new THREE.SphereGeometry(0.45, 48, 48), headMat);
+            head.position.y = 1.45;
             head.castShadow = true;
             robotGroup.add(head);
             
-            // Eyes (white with black pupils)
+            // Hair (black/dark brown)
+            const hairMat = new THREE.MeshStandardMaterial({ color: 0x4a2c2c });
+            const hair = new THREE.Mesh(new THREE.SphereGeometry(0.48, 32, 32), hairMat);
+            hair.position.y = 1.75;
+            hair.scale.set(1, 0.4, 1);
+            robotGroup.add(hair);
+            
+            // Eyes (white with iris and pupils)
             const eyeWhiteMat = new THREE.MeshStandardMaterial({ color: 0xffffff });
-            const eyeBlackMat = new THREE.MeshStandardMaterial({ color: 0x000000 });
-            const leftEyeWhite = new THREE.Mesh(new THREE.SphereGeometry(0.15, 32, 32), eyeWhiteMat);
-            leftEyeWhite.position.set(-0.2, 1.7, 0.65);
+            const eyeIrisMat = new THREE.MeshStandardMaterial({ color: 0x4a2c1e });
+            const eyePupilMat = new THREE.MeshStandardMaterial({ color: 0x000000 });
+            
+            const leftEyeWhite = new THREE.Mesh(new THREE.SphereGeometry(0.12, 32, 32), eyeWhiteMat);
+            leftEyeWhite.position.set(-0.16, 1.58, 0.45);
             robotGroup.add(leftEyeWhite);
-            const rightEyeWhite = new THREE.Mesh(new THREE.SphereGeometry(0.15, 32, 32), eyeWhiteMat);
-            rightEyeWhite.position.set(0.2, 1.7, 0.65);
+            const rightEyeWhite = new THREE.Mesh(new THREE.SphereGeometry(0.12, 32, 32), eyeWhiteMat);
+            rightEyeWhite.position.set(0.16, 1.58, 0.45);
             robotGroup.add(rightEyeWhite);
-            const leftPupil = new THREE.Mesh(new THREE.SphereGeometry(0.08, 32, 32), eyeBlackMat);
-            leftPupil.position.set(-0.2, 1.69, 0.8);
+            
+            const leftIris = new THREE.Mesh(new THREE.SphereGeometry(0.08, 32, 32), eyeIrisMat);
+            leftIris.position.set(-0.16, 1.58, 0.57);
+            robotGroup.add(leftIris);
+            const rightIris = new THREE.Mesh(new THREE.SphereGeometry(0.08, 32, 32), eyeIrisMat);
+            rightIris.position.set(0.16, 1.58, 0.57);
+            robotGroup.add(rightIris);
+            
+            const leftPupil = new THREE.Mesh(new THREE.SphereGeometry(0.05, 32, 32), eyePupilMat);
+            leftPupil.position.set(-0.16, 1.57, 0.64);
             robotGroup.add(leftPupil);
-            const rightPupil = new THREE.Mesh(new THREE.SphereGeometry(0.08, 32, 32), eyeBlackMat);
-            rightPupil.position.set(0.2, 1.69, 0.8);
+            const rightPupil = new THREE.Mesh(new THREE.SphereGeometry(0.05, 32, 32), eyePupilMat);
+            rightPupil.position.set(0.16, 1.57, 0.64);
             robotGroup.add(rightPupil);
             
-            // Mouth (simple curved cylinder)
-            const mouthMat = new THREE.MeshStandardMaterial({ color: 0x442200 });
-            const mouth = new THREE.Mesh(new THREE.TorusGeometry(0.25, 0.05, 16, 32, Math.PI), mouthMat);
-            mouth.rotation.x = 0.2;
-            mouth.position.set(0, 1.45, 0.7);
-            robotGroup.add(mouth);
+            // Eyebrows
+            const browMat = new THREE.MeshStandardMaterial({ color: 0x4a2c2c });
+            const leftBrow = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.05, 0.1), browMat);
+            leftBrow.position.set(-0.2, 1.7, 0.48);
+            robotGroup.add(leftBrow);
+            const rightBrow = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.05, 0.1), browMat);
+            rightBrow.position.set(0.2, 1.7, 0.48);
+            robotGroup.add(rightBrow);
             
-            // Arms (cylinders)
-            const armMat = new THREE.MeshStandardMaterial({ color: 0x8B5A2B });
-            const leftArm = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 1.2, 8), armMat);
-            leftArm.position.set(-0.8, 1.1, 0);
-            leftArm.rotation.z = 0.3;
-            leftArm.castShadow = true;
-            robotGroup.add(leftArm);
-            const rightArm = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 1.2, 8), armMat);
-            rightArm.position.set(0.8, 1.1, 0);
-            rightArm.rotation.z = -0.3;
-            rightArm.castShadow = true;
-            robotGroup.add(rightArm);
+            // Jaw (lower part that will move)
+            const jawMat = new THREE.MeshStandardMaterial({ color: 0xDEB887 });
+            const jaw = new THREE.Mesh(new THREE.SphereGeometry(0.28, 32, 32), jawMat);
+            jaw.position.y = 1.28;
+            jaw.scale.set(0.9, 0.5, 0.7);
+            jaw.castShadow = true;
+            robotGroup.add(jaw);
             
-            // Hands (spheres)
-            const handMat = new THREE.MeshStandardMaterial({ color: 0x7A4A1B });
-            const leftHand = new THREE.Mesh(new THREE.SphereGeometry(0.2, 16, 16), handMat);
-            leftHand.position.set(-1.25, 0.65, 0);
+            // Nose
+            const noseMat = new THREE.MeshStandardMaterial({ color: 0xDEB887 });
+            const nose = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.1, 0.12, 8), noseMat);
+            nose.position.set(0, 1.45, 0.5);
+            robotGroup.add(nose);
+            
+            // Arms (with cylinders, more natural)
+            const armMat = new THREE.MeshStandardMaterial({ color: 0xDEB887 });
+            const leftArmUpper = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.12, 0.65, 8), armMat);
+            leftArmUpper.position.set(-0.65, 1.0, 0);
+            leftArmUpper.rotation.z = 0.4;
+            leftArmUpper.castShadow = true;
+            robotGroup.add(leftArmUpper);
+            const rightArmUpper = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.12, 0.65, 8), armMat);
+            rightArmUpper.position.set(0.65, 1.0, 0);
+            rightArmUpper.rotation.z = -0.4;
+            rightArmUpper.castShadow = true;
+            robotGroup.add(rightArmUpper);
+            
+            const leftForearm = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.09, 0.55, 8), armMat);
+            leftForearm.position.set(-0.95, 0.68, 0);
+            leftForearm.rotation.z = 0.6;
+            leftForearm.castShadow = true;
+            robotGroup.add(leftForearm);
+            const rightForearm = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.09, 0.55, 8), armMat);
+            rightForearm.position.set(0.95, 0.68, 0);
+            rightForearm.rotation.z = -0.6;
+            rightForearm.castShadow = true;
+            robotGroup.add(rightForearm);
+            
+            // Hands
+            const handMatObj = new THREE.MeshStandardMaterial({ color: 0xDEB887 });
+            const leftHand = new THREE.Mesh(new THREE.SphereGeometry(0.12, 16, 16), handMatObj);
+            leftHand.position.set(-1.2, 0.45, 0);
             robotGroup.add(leftHand);
-            const rightHand = new THREE.Mesh(new THREE.SphereGeometry(0.2, 16, 16), handMat);
-            rightHand.position.set(1.25, 0.65, 0);
+            const rightHand = new THREE.Mesh(new THREE.SphereGeometry(0.12, 16, 16), handMatObj);
+            rightHand.position.set(1.2, 0.45, 0);
             robotGroup.add(rightHand);
             
             // Legs
-            const legMat = new THREE.MeshStandardMaterial({ color: 0x6B3E1A });
-            const leftLeg = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.3, 1.0, 8), legMat);
-            leftLeg.position.set(-0.4, 0.0, 0);
+            const legMatObj = new THREE.MeshStandardMaterial({ color: 0xCDA87C });
+            const leftLeg = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.14, 0.8, 8), legMatObj);
+            leftLeg.position.set(-0.25, 0.1, 0);
             leftLeg.castShadow = true;
             robotGroup.add(leftLeg);
-            const rightLeg = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.3, 1.0, 8), legMat);
-            rightLeg.position.set(0.4, 0.0, 0);
+            const rightLeg = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.14, 0.8, 8), legMatObj);
+            rightLeg.position.set(0.25, 0.1, 0);
             rightLeg.castShadow = true;
             robotGroup.add(rightLeg);
             
-            // Feet (flattened spheres)
-            const footMat = new THREE.MeshStandardMaterial({ color: 0x5A3010 });
-            const leftFoot = new THREE.Mesh(new THREE.SphereGeometry(0.3, 16, 16), footMat);
-            leftFoot.scale.set(1.2, 0.3, 0.8);
-            leftFoot.position.set(-0.45, -0.5, 0.1);
+            // Feet
+            const footMatObj = new THREE.MeshStandardMaterial({ color: 0x8B5A2B });
+            const leftFoot = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.12, 0.5), footMatObj);
+            leftFoot.position.set(-0.28, -0.3, 0.1);
+            leftFoot.castShadow = true;
             robotGroup.add(leftFoot);
-            const rightFoot = new THREE.Mesh(new THREE.SphereGeometry(0.3, 16, 16), footMat);
-            rightFoot.scale.set(1.2, 0.3, 0.8);
-            rightFoot.position.set(0.45, -0.5, 0.1);
+            const rightFoot = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.12, 0.5), footMatObj);
+            rightFoot.position.set(0.28, -0.3, 0.1);
+            rightFoot.castShadow = true;
             robotGroup.add(rightFoot);
             
             scene.add(robotGroup);
             
-            // Add a floating label above the robot (CSS2D)
-            const labelDiv = document.createElement('div');
-            labelDiv.textContent = '🤖 "I am Gesner AI Robot – created by Gesner Deslandes"';
-            labelDiv.style.backgroundColor = 'rgba(0,0,0,0.7)';
-            labelDiv.style.color = '#ffaa33';
-            labelDiv.style.padding = '4px 10px';
-            labelDiv.style.borderRadius = '20px';
-            labelDiv.style.fontSize = '14px';
-            labelDiv.style.fontWeight = 'bold';
-            labelDiv.style.border = '1px solid #ffaa33';
-            const labelObj = new CSS2DObject(labelDiv);
-            labelObj.position.set(0, 2.3, 0);
-            scene.add(labelObj);
+            // CSS2D floating label above head
+            const nameDiv = document.createElement('div');
+            nameDiv.textContent = '🤖 Gesner AI Robot';
+            nameDiv.style.backgroundColor = 'rgba(0,0,0,0.6)';
+            nameDiv.style.color = '#ffaa33';
+            nameDiv.style.padding = '2px 8px';
+            nameDiv.style.borderRadius = '20px';
+            nameDiv.style.fontSize = '12px';
+            nameDiv.style.border = '1px solid #ffaa33';
+            const nameLabel = new CSS2DObject(nameDiv);
+            nameLabel.position.set(0, 2.1, 0);
+            scene.add(nameLabel);
             
-            // --- Animation variables ---
+            // --- Animation state for speaking ---
+            let isSpeaking = false;
+            let speechTimer = null;
+            const speechTextElem = document.getElementById('speech-text');
+            const messages = [
+                "Hello! I am Gesner AI Robot, created by Gesner Deslandes.",
+                "At GlobalInternet.py, we build AI solutions and educational software.",
+                "I can teach you Haitian Creole, from beginner to advanced.",
+                "Our Ti Malice software makes learning fun for kids.",
+                "Would you like to learn Kreyòl today?"
+            ];
+            let msgIndex = 0;
+            
+            // Function to update speech bubble and trigger animations
+            function speakMessage(message) {
+                speechTextElem.innerText = message;
+                // Start speaking animation (jaw movement, eyebrow raise, arm wave)
+                if (isSpeaking) return;
+                isSpeaking = true;
+                
+                // Jaw movement: open/close loop
+                let jawOpen = 0;
+                const jawInterval = setInterval(() => {
+                    if (!isSpeaking) {
+                        clearInterval(jawInterval);
+                        jaw.position.y = 1.28; // reset
+                        return;
+                    }
+                    jawOpen = jawOpen === 0 ? 0.06 : 0;
+                    jaw.position.y = 1.28 + jawOpen;
+                }, 200);
+                
+                // Eyebrow wiggle and arm wave
+                let browTime = 0;
+                const browInterval = setInterval(() => {
+                    if (!isSpeaking) {
+                        clearInterval(browInterval);
+                        leftBrow.position.y = 1.7;
+                        rightBrow.position.y = 1.7;
+                        leftArmUpper.rotation.z = 0.4;
+                        rightArmUpper.rotation.z = -0.4;
+                        leftForearm.rotation.z = 0.6;
+                        rightForearm.rotation.z = -0.6;
+                        return;
+                    }
+                    browTime += 0.3;
+                    const lift = Math.sin(browTime) * 0.03;
+                    leftBrow.position.y = 1.7 + lift;
+                    rightBrow.position.y = 1.7 + lift;
+                    // Arm wave
+                    const wave = Math.sin(browTime * 2) * 0.2;
+                    rightArmUpper.rotation.z = -0.4 + wave * 0.5;
+                    leftArmUpper.rotation.z = 0.4 - wave * 0.3;
+                    rightForearm.rotation.z = -0.6 + wave * 0.4;
+                    leftForearm.rotation.z = 0.6 - wave * 0.3;
+                }, 150);
+                
+                // Store intervals to clear after speaking duration
+                const duration = 3500; // message display time
+                speechTimer = setTimeout(() => {
+                    isSpeaking = false;
+                    clearInterval(jawInterval);
+                    clearInterval(browInterval);
+                    jaw.position.y = 1.28;
+                    leftBrow.position.y = 1.7;
+                    rightBrow.position.y = 1.7;
+                    leftArmUpper.rotation.z = 0.4;
+                    rightArmUpper.rotation.z = -0.4;
+                    leftForearm.rotation.z = 0.6;
+                    rightForearm.rotation.z = -0.6;
+                }, duration);
+            }
+            
+            // Auto-start first message after 1 second
+            setTimeout(() => {
+                speakMessage(messages[0]);
+                msgIndex = 1;
+            }, 1000);
+            
+            // Cycle messages every 5 seconds
+            setInterval(() => {
+                if (!isSpeaking) {
+                    speakMessage(messages[msgIndex % messages.length]);
+                    msgIndex++;
+                }
+            }, 5000);
+            
+            // Button to force a new random message
+            document.getElementById('speakBtn').addEventListener('click', () => {
+                if (speechTimer) clearTimeout(speechTimer);
+                if (isSpeaking) {
+                    isSpeaking = false;
+                    // reset jaw and brows
+                    jaw.position.y = 1.28;
+                    leftBrow.position.y = 1.7;
+                    rightBrow.position.y = 1.7;
+                    leftArmUpper.rotation.z = 0.4;
+                    rightArmUpper.rotation.z = -0.4;
+                    leftForearm.rotation.z = 0.6;
+                    rightForearm.rotation.z = -0.6;
+                }
+                const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+                speakMessage(randomMsg);
+            });
+            
+            // Blink eyes periodically (independent of speech)
+            function blinkEyes() {
+                leftPupil.scale.set(1, 0.05, 1);
+                rightPupil.scale.set(1, 0.05, 1);
+                setTimeout(() => {
+                    leftPupil.scale.set(1, 1, 1);
+                    rightPupil.scale.set(1, 1, 1);
+                }, 100);
+            }
+            setInterval(blinkEyes, 4000);
+            
+            // --- Animate environment (rotating gear, slight robot idle) ---
             let time = 0;
-            
-            // --- Animation loop ---
-            function animate() {
-                requestAnimationFrame(animate);
+            function animateScene() {
+                requestAnimationFrame(animateScene);
                 time += 0.02;
+                gear.rotation.y += 0.02;
                 
-                // Move box back and forth on conveyor belt
-                const boxX = 2 + Math.sin(time * 1.5) * 1.2;
-                movingBox.position.x = boxX;
+                // Idle head movement (slight tilt)
+                head.rotation.z = Math.sin(time * 0.8) * 0.02;
                 
-                // Rotate gears
-                gear1.rotation.y += 0.03;
-                gear2.rotation.y -= 0.04;
-                
-                // Flash warning light
-                const intensity = 0.6 + Math.sin(time * 10) * 0.4;
-                warningLight.intensity = intensity;
-                
-                // Slight idle animation for robot: head tilt or arm wave?
-                // Simple: rotate head slightly left/right
-                head.rotation.z = Math.sin(time * 1.2) * 0.05;
-                // Arm wave
-                rightArm.rotation.z = -0.3 + Math.sin(time * 2) * 0.2;
-                leftArm.rotation.z = 0.3 - Math.sin(time * 2) * 0.2;
-                
-                // Update controls
                 controls.update();
-                
-                // Render
                 renderer.render(scene, camera);
                 labelRenderer.render(scene, camera);
             }
+            animateScene();
             
-            animate();
-            
-            // Handle window resize
-            window.addEventListener('resize', onWindowResize, false);
-            function onWindowResize() {
+            window.addEventListener('resize', () => {
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
                 labelRenderer.setSize(window.innerWidth, window.innerHeight);
-            }
+            });
         </script>
     </body>
     </html>
     """
-    # Use components.html to embed the interactive 3D scene
-    st.components.v1.html(robot_html, height=600, scrolling=False)
+    st.components.v1.html(robot_html, height=650, scrolling=False)
 
 # ---------- UI COMPONENTS ----------
 def dictionary_manager(t):
