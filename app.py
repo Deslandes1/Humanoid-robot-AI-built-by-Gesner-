@@ -628,7 +628,7 @@ def render_audio_player():
             st.audio(data, format=mime)
         st.session_state.play_audio = None
 
-# ---------- HUMANOID ROBOT PAGE (speech bubble at bottom, no foreign languages) ----------
+# ---------- HUMANOID ROBOT PAGE (no speech bubble) ----------
 def humanoid_robot_page():
     st.markdown("## 🤖 GlobalInternet.py Humanoid Robot")
     st.markdown("*A realistic humanoid robot that speaks, blinks, and gestures – created by Gesner Deslandes*")
@@ -665,40 +665,6 @@ def humanoid_robot_page():
                 z-index: 100;
                 backdrop-filter: blur(5px);
             }
-            #speech-bubble {
-                position: absolute;
-                bottom: 100px;
-                left: 50%;
-                transform: translateX(-50%);
-                background: rgba(0,0,0,0.85);
-                color: #ffdd99;
-                padding: 10px 18px;
-                border-radius: 30px;
-                font-size: 14px;
-                font-weight: bold;
-                max-width: 75%;
-                text-align: center;
-                pointer-events: none;
-                z-index: 200;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-                border: 1px solid #ffaa33;
-                backdrop-filter: blur(8px);
-                font-family: inherit;
-                white-space: normal;
-                word-wrap: break-word;
-                line-height: 1.4;
-            }
-            .speech-arrow {
-                position: absolute;
-                top: -12px;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 0;
-                height: 0;
-                border-left: 12px solid transparent;
-                border-right: 12px solid transparent;
-                border-bottom: 12px solid rgba(0,0,0,0.85);
-            }
             button {
                 position: absolute;
                 bottom: 30px;
@@ -727,10 +693,6 @@ def humanoid_robot_page():
         </div>
         <div id="company">
             🌐 GlobalInternet.py – AI Education • Software Development • Industrial Robotics
-        </div>
-        <div id="speech-bubble">
-            <span id="speech-text">Hello! I am Gesner AI Robot.</span>
-            <div class="speech-arrow"></div>
         </div>
         <button id="speakBtn">🗣️ Make Robot Speak</button>
         
@@ -984,10 +946,6 @@ def humanoid_robot_page():
             
             function speakMessage(message) {
                 stopSpeaking();
-                // Update speech bubble text
-                const speechTextElem = document.getElementById('speech-text');
-                speechTextElem.innerText = message;
-                
                 // Start visual speaking animation
                 startSpeakingAnimation();
                 
@@ -1068,42 +1026,17 @@ def humanoid_robot_page():
                 rightForearm.rotation.z = -0.6;
             }
             
-            // --- Full company introduction (spoken only once at start, then short teaching offers) ---
-            const fullIntro = `Hello! I am the GlobalInternet.py Humanoid Robot, created by Gesner Deslandes. 
-            
-Our company builds Python-based software on demand for clients worldwide. Like Silicon Valley, but with a Haitian touch and outstanding outcomes. 
-We offer AI-powered solutions – chatbots, data analysis, automation; complete election and voting systems – secure, multi-language, real-time; web applications – dashboards, internal tools, online platforms; and full package delivery – we email you the complete code and guide you through installation.
-Whether you need a company website, a custom software tool, or a full-scale online platform – we build it, you own it.
-Founder and CEO: Gesner Deslandes – Engineer, AI Enthusiast, Python Expert.
-Contact: (509) 4738-5663, email: deslandes78@gmail.com.
-I can teach you four languages: English, French, Spanish, and Haitian Creole. Just ask me for beginner, intermediate, or advanced lessons in any of them. Let's start learning today!`;
-            
-            // Shorter messages (only English, no foreign phrases)
+            // --- Messages (only spoken on button click) ---
             const messageList = [
-                fullIntro,
+                "Hello! I am the GlobalInternet.py Humanoid Robot, created by Gesner Deslandes. Our company builds Python-based software on demand for clients worldwide. Like Silicon Valley, but with a Haitian touch and outstanding outcomes. We offer AI-powered solutions – chatbots, data analysis, automation; complete election and voting systems – secure, multi-language, real-time; web applications – dashboards, internal tools, online platforms; and full package delivery – we email you the complete code and guide you through installation. Whether you need a company website, a custom software tool, or a full-scale online platform – we build it, you own it. Founder and CEO: Gesner Deslandes – Engineer, AI Enthusiast, Python Expert. Contact: (509) 4738-5663, email: deslandes78@gmail.com. I can teach you four languages: English, French, Spanish, and Haitian Creole. Just ask me for beginner, intermediate, or advanced lessons in any of them.",
                 "I can teach you English, from beginner to advanced. Would you like a lesson?",
                 "I can teach you French. Ask me for French lessons.",
                 "I can teach you Spanish. Would you like to learn Spanish?",
                 "I can teach you Haitian Creole. Do you want to learn Kreyòl?",
                 "Visit our website globalinternet.py to see our projects and services."
             ];
-            let msgIndex = 0;
             
-            // Auto-start first message after 1 second
-            setTimeout(() => {
-                speakMessage(fullIntro);
-                msgIndex = 1;
-            }, 1000);
-            
-            // Cycle through other messages every 14 seconds
-            setInterval(() => {
-                if (!synth.speaking && !isAnimating) {
-                    speakMessage(messageList[msgIndex % messageList.length]);
-                    msgIndex++;
-                }
-            }, 14000);
-            
-            // Button to force speak a random message
+            // Button click: speak a random message
             document.getElementById('speakBtn').addEventListener('click', () => {
                 const randomMsg = messageList[Math.floor(Math.random() * messageList.length)];
                 speakMessage(randomMsg);
