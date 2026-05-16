@@ -628,7 +628,7 @@ def render_audio_player():
             st.audio(data, format=mime)
         st.session_state.play_audio = None
 
-# ---------- HUMANOID ROBOT PAGE (with speech synthesis + full company intro) ----------
+# ---------- HUMANOID ROBOT PAGE (speech bubble moved to top) ----------
 def humanoid_robot_page():
     st.markdown("## 🤖 GlobalInternet.py Humanoid Robot")
     st.markdown("*A realistic humanoid robot that speaks, blinks, and gestures – created by Gesner Deslandes*")
@@ -667,34 +667,36 @@ def humanoid_robot_page():
             }
             #speech-bubble {
                 position: absolute;
-                bottom: 120px;
+                top: 80px;
                 left: 50%;
                 transform: translateX(-50%);
-                background: white;
-                color: #1a1a2e;
+                background: rgba(0,0,0,0.85);
+                color: #ffdd99;
                 padding: 12px 20px;
-                border-radius: 30px;
-                font-size: 16px;
+                border-radius: 40px;
+                font-size: 15px;
                 font-weight: bold;
-                max-width: 80%;
+                max-width: 70%;
                 text-align: center;
                 pointer-events: none;
                 z-index: 200;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-                border: 2px solid #ffaa33;
-                transition: opacity 0.3s;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+                border: 1px solid #ffaa33;
+                backdrop-filter: blur(8px);
                 font-family: inherit;
+                white-space: normal;
+                word-wrap: break-word;
             }
             .speech-arrow {
                 position: absolute;
-                bottom: -10px;
+                bottom: -12px;
                 left: 50%;
                 transform: translateX(-50%);
                 width: 0;
                 height: 0;
-                border-left: 10px solid transparent;
-                border-right: 10px solid transparent;
-                border-top: 10px solid white;
+                border-left: 12px solid transparent;
+                border-right: 12px solid transparent;
+                border-top: 12px solid rgba(0,0,0,0.85);
             }
             button {
                 position: absolute;
@@ -750,8 +752,8 @@ def humanoid_robot_page():
             scene.background = new THREE.Color(0x0a0a2a);
             scene.fog = new THREE.FogExp2(0x0a0a2a, 0.008);
 
-            const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.set(3, 2, 4);
+            const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(2.8, 2.2, 4.5);
             camera.lookAt(0, 1.2, 0);
 
             const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -1075,7 +1077,7 @@ Founder and CEO: Gesner Deslandes – Engineer, AI Enthusiast, Python Expert.
 Contact: (509) 4738-5663, email: deslandes78@gmail.com.
 I can teach you four languages: English, French, Spanish, and Haitian Creole. Ask me about beginner, intermediate, or advanced lessons in any of these languages. Let's start learning today!`;
             
-            // Shorter messages for auto-cycle (but we'll use the full intro as first)
+            // Shorter messages for auto-cycle
             const messageList = [
                 fullIntro,
                 "I can teach you English from beginner to advanced. Would you like a lesson?",
@@ -1092,13 +1094,13 @@ I can teach you four languages: English, French, Spanish, and Haitian Creole. As
                 msgIndex = 1;
             }, 1000);
             
-            // Cycle through other messages every 12 seconds
+            // Cycle through other messages every 14 seconds (to let full intro finish)
             setInterval(() => {
                 if (!synth.speaking && !isAnimating) {
                     speakMessage(messageList[msgIndex % messageList.length]);
                     msgIndex++;
                 }
-            }, 12000);
+            }, 14000);
             
             // Button to force speak a random message
             document.getElementById('speakBtn').addEventListener('click', () => {
