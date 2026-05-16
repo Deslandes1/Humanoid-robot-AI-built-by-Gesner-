@@ -628,7 +628,7 @@ def render_audio_player():
             st.audio(data, format=mime)
         st.session_state.play_audio = None
 
-# ---------- HUMANOID ROBOT PAGE (with speech synthesis) ----------
+# ---------- HUMANOID ROBOT PAGE (with speech synthesis + full company intro) ----------
 def humanoid_robot_page():
     st.markdown("## 🤖 GlobalInternet.py Humanoid Robot")
     st.markdown("*A realistic humanoid robot that speaks, blinks, and gestures – created by Gesner Deslandes*")
@@ -720,7 +720,7 @@ def humanoid_robot_page():
     <body>
         <div id="info">
             🤖 Humanoid Robot | Created by Gesner Deslandes | GlobalInternet.py<br>
-            I teach Kreyòl, AI, and industrial automation.
+            I teach English, French, Spanish, and Haitian Creole.
         </div>
         <div id="company">
             🌐 GlobalInternet.py – AI Education • Software Development • Industrial Robotics
@@ -883,7 +883,7 @@ def humanoid_robot_page():
             rightBrow.position.set(0.2, 1.7, 0.48);
             robotGroup.add(rightBrow);
             
-            // Jaw (lower part that will move)
+            // Jaw (moving part)
             const jawMat = new THREE.MeshStandardMaterial({ color: 0xDEB887 });
             const jaw = new THREE.Mesh(new THREE.SphereGeometry(0.28, 32, 32), jawMat);
             jaw.position.y = 1.28;
@@ -930,7 +930,7 @@ def humanoid_robot_page():
             rightHand.position.set(1.2, 0.45, 0);
             robotGroup.add(rightHand);
             
-            // Legs
+            // Legs and feet
             const legMatObj = new THREE.MeshStandardMaterial({ color: 0xCDA87C });
             const leftLeg = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.14, 0.8, 8), legMatObj);
             leftLeg.position.set(-0.25, 0.1, 0);
@@ -941,7 +941,6 @@ def humanoid_robot_page():
             rightLeg.castShadow = true;
             robotGroup.add(rightLeg);
             
-            // Feet
             const footMatObj = new THREE.MeshStandardMaterial({ color: 0x8B5A2B });
             const leftFoot = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.12, 0.5), footMatObj);
             leftFoot.position.set(-0.28, -0.3, 0.1);
@@ -954,7 +953,7 @@ def humanoid_robot_page():
             
             scene.add(robotGroup);
             
-            // CSS2D floating label above head
+            // CSS2D label above head
             const nameDiv = document.createElement('div');
             nameDiv.textContent = '🤖 Gesner AI Robot';
             nameDiv.style.backgroundColor = 'rgba(0,0,0,0.6)';
@@ -967,66 +966,60 @@ def humanoid_robot_page():
             nameLabel.position.set(0, 2.1, 0);
             scene.add(nameLabel);
             
-            // --- Speech Synthesis (audio) ---
-            function speakText(message) {
-                if (!window.speechSynthesis) {
-                    console.warn("Speech synthesis not supported");
-                    return;
+            // --- Speech Synthesis (Web Speech API) ---
+            let synth = window.speechSynthesis;
+            let currentUtterance = null;
+            
+            function stopSpeaking() {
+                if (synth.speaking || synth.pending) {
+                    synth.cancel();
                 }
-                // Cancel any ongoing speech to avoid overlap
-                window.speechSynthesis.cancel();
-                const utterance = new SpeechSynthesisUtterance(message);
-                utterance.lang = 'en-US';
-                utterance.rate = 1.0;
-                utterance.pitch = 1.1;
-                utterance.volume = 1;
-                // Optional: select a voice (you can loop through voices)
-                window.speechSynthesis.speak(utterance);
+                if (currentUtterance) {
+                    currentUtterance = null;
+                }
             }
             
-            // --- Animation state for speaking ---
-            let isSpeaking = false;
-            let speechTimer = null;
-            let currentJawInterval = null;
-            let currentBrowInterval = null;
-            const speechTextElem = document.getElementById('speech-text');
-            const messages = [
-                "Hello! I am Gesner AI Robot, created by Gesner Deslandes.",
-                "At GlobalInternet.py, we build AI solutions and educational software.",
-                "I can teach you Haitian Creole, from beginner to advanced.",
-                "Our Ti Malice software makes learning fun for kids.",
-                "Would you like to learn Kreyòl today?"
-            ];
-            let msgIndex = 0;
-            
-            // Function to update speech bubble, trigger animations, AND speak audio
             function speakMessage(message) {
+                stopSpeaking();
+                // Update speech bubble text
+                const speechTextElem = document.getElementById('speech-text');
                 speechTextElem.innerText = message;
-                // Speak the message using Web Speech API
-                speakText(message);
                 
-                // Start speaking animation (jaw movement, eyebrow raise, arm wave)
-                if (isSpeaking) {
-                    // Stop current animations if any
-                    if (currentJawInterval) clearInterval(currentJawInterval);
-                    if (currentBrowInterval) clearInterval(currentBrowInterval);
-                    if (speechTimer) clearTimeout(speechTimer);
-                    // Reset jaw and brows
-                    jaw.position.y = 1.28;
-                    leftBrow.position.y = 1.7;
-                    rightBrow.position.y = 1.7;
-                    leftArmUpper.rotation.z = 0.4;
-                    rightArmUpper.rotation.z = -0.4;
-                    leftForearm.rotation.z = 0.6;
-                    rightForearm.rotation.z = -0.6;
-                }
-                isSpeaking = true;
+                // Start visual speaking animation
+                startSpeakingAnimation();
                 
-                // Jaw movement: open/close loop
+                // Speak using browser's speech synthesis
+                const utterance = new SpeechSynthesisUtterance(message);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.9;
+                utterance.pitch = 1.1;
+                utterance.volume = 1;
+                utterance.onend = function() {
+                    currentUtterance = null;
+                    stopSpeakingAnimation();
+                };
+                utterance.onerror = function() {
+                    currentUtterance = null;
+                    stopSpeakingAnimation();
+                };
+                currentUtterance = utterance;
+                synth.speak(utterance);
+            }
+            
+            // Animation state
+            let isAnimating = false;
+            let jawInterval = null;
+            let browInterval = null;
+            
+            function startSpeakingAnimation() {
+                if (isAnimating) return;
+                isAnimating = true;
+                
+                // Jaw movement
                 let jawOpen = 0;
-                currentJawInterval = setInterval(() => {
-                    if (!isSpeaking) {
-                        clearInterval(currentJawInterval);
+                jawInterval = setInterval(() => {
+                    if (!isAnimating) {
+                        clearInterval(jawInterval);
                         jaw.position.y = 1.28;
                         return;
                     }
@@ -1036,9 +1029,9 @@ def humanoid_robot_page():
                 
                 // Eyebrow wiggle and arm wave
                 let browTime = 0;
-                currentBrowInterval = setInterval(() => {
-                    if (!isSpeaking) {
-                        clearInterval(currentBrowInterval);
+                browInterval = setInterval(() => {
+                    if (!isAnimating) {
+                        clearInterval(browInterval);
                         leftBrow.position.y = 1.7;
                         rightBrow.position.y = 1.7;
                         leftArmUpper.rotation.z = 0.4;
@@ -1051,64 +1044,69 @@ def humanoid_robot_page():
                     const lift = Math.sin(browTime) * 0.03;
                     leftBrow.position.y = 1.7 + lift;
                     rightBrow.position.y = 1.7 + lift;
-                    // Arm wave
                     const wave = Math.sin(browTime * 2) * 0.2;
                     rightArmUpper.rotation.z = -0.4 + wave * 0.5;
                     leftArmUpper.rotation.z = 0.4 - wave * 0.3;
                     rightForearm.rotation.z = -0.6 + wave * 0.4;
                     leftForearm.rotation.z = 0.6 - wave * 0.3;
                 }, 150);
-                
-                // Stop animations after message duration (based on length)
-                const duration = Math.max(3000, message.length * 100);
-                speechTimer = setTimeout(() => {
-                    isSpeaking = false;
-                    if (currentJawInterval) clearInterval(currentJawInterval);
-                    if (currentBrowInterval) clearInterval(currentBrowInterval);
-                    jaw.position.y = 1.28;
-                    leftBrow.position.y = 1.7;
-                    rightBrow.position.y = 1.7;
-                    leftArmUpper.rotation.z = 0.4;
-                    rightArmUpper.rotation.z = -0.4;
-                    leftForearm.rotation.z = 0.6;
-                    rightForearm.rotation.z = -0.6;
-                }, duration);
             }
+            
+            function stopSpeakingAnimation() {
+                isAnimating = false;
+                if (jawInterval) clearInterval(jawInterval);
+                if (browInterval) clearInterval(browInterval);
+                jaw.position.y = 1.28;
+                leftBrow.position.y = 1.7;
+                rightBrow.position.y = 1.7;
+                leftArmUpper.rotation.z = 0.4;
+                rightArmUpper.rotation.z = -0.4;
+                leftForearm.rotation.z = 0.6;
+                rightForearm.rotation.z = -0.6;
+            }
+            
+            // --- Full company introduction and teaching capabilities ---
+            const fullIntro = `Hello! I am the GlobalInternet.py Humanoid Robot, created by Gesner Deslandes. 
+            
+Our company builds Python-based software on demand for clients worldwide. Like Silicon Valley, but with a Haitian touch and outstanding outcomes. 
+We offer AI-powered solutions – chatbots, data analysis, automation; complete election and voting systems – secure, multi-language, real-time; web applications – dashboards, internal tools, online platforms; and full package delivery – we email you the complete code and guide you through installation.
+Whether you need a company website, a custom software tool, or a full-scale online platform – we build it, you own it.
+Founder and CEO: Gesner Deslandes – Engineer, AI Enthusiast, Python Expert.
+Contact: (509) 4738-5663, email: deslandes78@gmail.com.
+I can teach you four languages: English, French, Spanish, and Haitian Creole. Ask me about beginner, intermediate, or advanced lessons in any of these languages. Let's start learning today!`;
+            
+            // Shorter messages for auto-cycle (but we'll use the full intro as first)
+            const messageList = [
+                fullIntro,
+                "I can teach you English from beginner to advanced. Would you like a lesson?",
+                "Je peux vous enseigner le français – parlez-vous français?",
+                "Puedo enseñarte español. ¿Te gustaría aprender?",
+                "Mwen ka anseye w Kreyòl Ayisyen. Ou vle aprann kreyòl?",
+                "Visit our website globalinternet.py to see our projects and services."
+            ];
+            let msgIndex = 0;
             
             // Auto-start first message after 1 second
             setTimeout(() => {
-                speakMessage(messages[0]);
+                speakMessage(fullIntro);
                 msgIndex = 1;
             }, 1000);
             
-            // Cycle messages every 6 seconds
+            // Cycle through other messages every 12 seconds
             setInterval(() => {
-                if (!isSpeaking) {
-                    speakMessage(messages[msgIndex % messages.length]);
+                if (!synth.speaking && !isAnimating) {
+                    speakMessage(messageList[msgIndex % messageList.length]);
                     msgIndex++;
                 }
-            }, 6000);
+            }, 12000);
             
-            // Button to force a new random message
+            // Button to force speak a random message
             document.getElementById('speakBtn').addEventListener('click', () => {
-                if (speechTimer) clearTimeout(speechTimer);
-                if (isSpeaking) {
-                    isSpeaking = false;
-                    if (currentJawInterval) clearInterval(currentJawInterval);
-                    if (currentBrowInterval) clearInterval(currentBrowInterval);
-                    jaw.position.y = 1.28;
-                    leftBrow.position.y = 1.7;
-                    rightBrow.position.y = 1.7;
-                    leftArmUpper.rotation.z = 0.4;
-                    rightArmUpper.rotation.z = -0.4;
-                    leftForearm.rotation.z = 0.6;
-                    rightForearm.rotation.z = -0.6;
-                }
-                const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+                const randomMsg = messageList[Math.floor(Math.random() * messageList.length)];
                 speakMessage(randomMsg);
             });
             
-            // Blink eyes periodically (independent of speech)
+            // Blink eyes periodically
             function blinkEyes() {
                 leftPupil.scale.set(1, 0.05, 1);
                 rightPupil.scale.set(1, 0.05, 1);
@@ -1119,16 +1117,13 @@ def humanoid_robot_page():
             }
             setInterval(blinkEyes, 4000);
             
-            // --- Animate environment (rotating gear, slight robot idle) ---
+            // Animate environment (gear rotation) and idle head movement
             let time = 0;
             function animateScene() {
                 requestAnimationFrame(animateScene);
                 time += 0.02;
                 gear.rotation.y += 0.02;
-                
-                // Idle head movement (slight tilt)
                 head.rotation.z = Math.sin(time * 0.8) * 0.02;
-                
                 controls.update();
                 renderer.render(scene, camera);
                 labelRenderer.render(scene, camera);
@@ -1306,7 +1301,8 @@ def show_sidebar():
                 <strong>Gesner AI</strong><br>
                 Created by <strong>Gesner Deslandes</strong><br>
                 Founder of <strong>GlobalInternet.py</strong><br>
-                ✉️ <a href="mailto:gesner@globalinternet.py">gesner@globalinternet.py</a><br>
+                ✉️ <a href="mailto:deslandes78@gmail.com">deslandes78@gmail.com</a><br>
+                📞 +509 4738-5663<br>
                 🌐 <a href="https://globalinternet.py" target="_blank">globalinternet.py</a>
             </div>
             """,
