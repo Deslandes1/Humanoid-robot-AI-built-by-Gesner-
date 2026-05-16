@@ -1026,8 +1026,12 @@ def humanoid_robot_page():
                 rightForearm.rotation.z = -0.6;
             }
             
+            // ========== NEW AI SPEECH (added by Gesner Deslandes) ==========
+            const aiSpeech = "AI will not take your job, however, it will create thousands of other jobs for programmers. The time has come for people to start learning AI and coding. Like the engineers of Silicon Valley, you don't need to write or learn every line of code. You just need to know how to write the prompt, and ask AI to build the software for you. You must also know which other apps to use, then process, use your eyes to see after deploy if it is really what you wanted. If not, you can tell AI to rewrite the codes, then commit changes of what works or not. You must be patient to copy, paste, and ask again and again until you get the best version of the app you want to build. With coding, you can do anything: building a software that can help you do your work better. For example, if you are an engineer, you no longer need to use pencils or rulers because AI can do this much faster. This is Gesner AI talking about what I have recently learned from being patient with coding and building what I want, like my website and any other software I recently built. Please share my phone number and email to contact me, and then I will build whatever you want. Contact me at (509) 4738-5663 or deslandes78@gmail.com.";
+            
             // --- Messages (only spoken on button click) ---
             const messageList = [
+                aiSpeech,
                 "Hello! I am the GlobalInternet.py Humanoid Robot, created by Gesner Deslandes. Our company builds Python-based software on demand for clients worldwide. Like Silicon Valley, but with a Haitian touch and outstanding outcomes. We offer AI-powered solutions – chatbots, data analysis, automation; complete election and voting systems – secure, multi-language, real-time; web applications – dashboards, internal tools, online platforms; and full package delivery – we email you the complete code and guide you through installation. Whether you need a company website, a custom software tool, or a full-scale online platform – we build it, you own it. Founder and CEO: Gesner Deslandes – Engineer, AI Enthusiast, Python Expert. Contact: (509) 4738-5663, email: deslandes78@gmail.com. I can teach you four languages: English, French, Spanish, and Haitian Creole. Just ask me for beginner, intermediate, or advanced lessons in any of them.",
                 "I can teach you English, from beginner to advanced. Would you like a lesson?",
                 "I can teach you French. Ask me for French lessons.",
@@ -1036,7 +1040,7 @@ def humanoid_robot_page():
                 "Visit our website globalinternet.py to see our projects and services."
             ];
             
-            // Button click: speak a random message
+            // Button click: speak a random message (first message is the new AI speech)
             document.getElementById('speakBtn').addEventListener('click', () => {
                 const randomMsg = messageList[Math.floor(Math.random() * messageList.length)];
                 speakMessage(randomMsg);
