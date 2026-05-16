@@ -628,7 +628,7 @@ def render_audio_player():
             st.audio(data, format=mime)
         st.session_state.play_audio = None
 
-# ---------- HUMANOID ROBOT PAGE (speech bubble moved to top) ----------
+# ---------- HUMANOID ROBOT PAGE (speech bubble at bottom, no foreign languages) ----------
 def humanoid_robot_page():
     st.markdown("## 🤖 GlobalInternet.py Humanoid Robot")
     st.markdown("*A realistic humanoid robot that speaks, blinks, and gestures – created by Gesner Deslandes*")
@@ -667,16 +667,16 @@ def humanoid_robot_page():
             }
             #speech-bubble {
                 position: absolute;
-                top: 80px;
+                bottom: 100px;
                 left: 50%;
                 transform: translateX(-50%);
                 background: rgba(0,0,0,0.85);
                 color: #ffdd99;
-                padding: 12px 20px;
-                border-radius: 40px;
-                font-size: 15px;
+                padding: 10px 18px;
+                border-radius: 30px;
+                font-size: 14px;
                 font-weight: bold;
-                max-width: 70%;
+                max-width: 75%;
                 text-align: center;
                 pointer-events: none;
                 z-index: 200;
@@ -686,17 +686,18 @@ def humanoid_robot_page():
                 font-family: inherit;
                 white-space: normal;
                 word-wrap: break-word;
+                line-height: 1.4;
             }
             .speech-arrow {
                 position: absolute;
-                bottom: -12px;
+                top: -12px;
                 left: 50%;
                 transform: translateX(-50%);
                 width: 0;
                 height: 0;
                 border-left: 12px solid transparent;
                 border-right: 12px solid transparent;
-                border-top: 12px solid rgba(0,0,0,0.85);
+                border-bottom: 12px solid rgba(0,0,0,0.85);
             }
             button {
                 position: absolute;
@@ -1067,7 +1068,7 @@ def humanoid_robot_page():
                 rightForearm.rotation.z = -0.6;
             }
             
-            // --- Full company introduction and teaching capabilities ---
+            // --- Full company introduction (spoken only once at start, then short teaching offers) ---
             const fullIntro = `Hello! I am the GlobalInternet.py Humanoid Robot, created by Gesner Deslandes. 
             
 Our company builds Python-based software on demand for clients worldwide. Like Silicon Valley, but with a Haitian touch and outstanding outcomes. 
@@ -1075,15 +1076,15 @@ We offer AI-powered solutions – chatbots, data analysis, automation; complete 
 Whether you need a company website, a custom software tool, or a full-scale online platform – we build it, you own it.
 Founder and CEO: Gesner Deslandes – Engineer, AI Enthusiast, Python Expert.
 Contact: (509) 4738-5663, email: deslandes78@gmail.com.
-I can teach you four languages: English, French, Spanish, and Haitian Creole. Ask me about beginner, intermediate, or advanced lessons in any of these languages. Let's start learning today!`;
+I can teach you four languages: English, French, Spanish, and Haitian Creole. Just ask me for beginner, intermediate, or advanced lessons in any of them. Let's start learning today!`;
             
-            // Shorter messages for auto-cycle
+            // Shorter messages (only English, no foreign phrases)
             const messageList = [
                 fullIntro,
-                "I can teach you English from beginner to advanced. Would you like a lesson?",
-                "Je peux vous enseigner le français – parlez-vous français?",
-                "Puedo enseñarte español. ¿Te gustaría aprender?",
-                "Mwen ka anseye w Kreyòl Ayisyen. Ou vle aprann kreyòl?",
+                "I can teach you English, from beginner to advanced. Would you like a lesson?",
+                "I can teach you French. Ask me for French lessons.",
+                "I can teach you Spanish. Would you like to learn Spanish?",
+                "I can teach you Haitian Creole. Do you want to learn Kreyòl?",
                 "Visit our website globalinternet.py to see our projects and services."
             ];
             let msgIndex = 0;
@@ -1094,7 +1095,7 @@ I can teach you four languages: English, French, Spanish, and Haitian Creole. As
                 msgIndex = 1;
             }, 1000);
             
-            // Cycle through other messages every 14 seconds (to let full intro finish)
+            // Cycle through other messages every 14 seconds
             setInterval(() => {
                 if (!synth.speaking && !isAnimating) {
                     speakMessage(messageList[msgIndex % messageList.length]);
