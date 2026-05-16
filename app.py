@@ -628,10 +628,10 @@ def render_audio_player():
             st.audio(data, format=mime)
         st.session_state.play_audio = None
 
-# ---------- HUMANOID ROBOT PAGE (no speech bubble) ----------
+# ---------- HUMANOID ROBOT PAGE (with enhanced expressions: eyes move while speaking) ----------
 def humanoid_robot_page():
     st.markdown("## 🤖 GlobalInternet.py Humanoid Robot")
-    st.markdown("*A realistic humanoid robot that speaks, blinks, and gestures – created by Gesner Deslandes*")
+    st.markdown("*A realistic humanoid robot that speaks, blinks, moves eyes, and gestures – created by Gesner Deslandes*")
     
     robot_html = """
     <!DOCTYPE html>
@@ -971,6 +971,7 @@ def humanoid_robot_page():
             let isAnimating = false;
             let jawInterval = null;
             let browInterval = null;
+            let eyeInterval = null;
             
             function startSpeakingAnimation() {
                 if (isAnimating) return;
@@ -1011,12 +1012,28 @@ def humanoid_robot_page():
                     rightForearm.rotation.z = -0.6 + wave * 0.4;
                     leftForearm.rotation.z = 0.6 - wave * 0.3;
                 }, 150);
+                
+                // Eye movement (pupils look left/right)
+                let eyeTime = 0;
+                eyeInterval = setInterval(() => {
+                    if (!isAnimating) {
+                        clearInterval(eyeInterval);
+                        leftPupil.position.x = -0.16;
+                        rightPupil.position.x = 0.16;
+                        return;
+                    }
+                    eyeTime += 0.2;
+                    const offset = Math.sin(eyeTime) * 0.03;  // move ±0.03
+                    leftPupil.position.x = -0.16 + offset;
+                    rightPupil.position.x = 0.16 + offset;
+                }, 100);
             }
             
             function stopSpeakingAnimation() {
                 isAnimating = false;
                 if (jawInterval) clearInterval(jawInterval);
                 if (browInterval) clearInterval(browInterval);
+                if (eyeInterval) clearInterval(eyeInterval);
                 jaw.position.y = 1.28;
                 leftBrow.position.y = 1.7;
                 rightBrow.position.y = 1.7;
@@ -1024,9 +1041,11 @@ def humanoid_robot_page():
                 rightArmUpper.rotation.z = -0.4;
                 leftForearm.rotation.z = 0.6;
                 rightForearm.rotation.z = -0.6;
+                leftPupil.position.x = -0.16;
+                rightPupil.position.x = 0.16;
             }
             
-            // ========== NEW AI SPEECH (added by Gesner Deslandes) ==========
+            // ========== AI SPEECH ==========
             const aiSpeech = "AI will not take your job, however, it will create thousands of other jobs for programmers. The time has come for people to start learning AI and coding. Like the engineers of Silicon Valley, you don't need to write or learn every line of code. You just need to know how to write the prompt, and ask AI to build the software for you. You must also know which other apps to use, then process, use your eyes to see after deploy if it is really what you wanted. If not, you can tell AI to rewrite the codes, then commit changes of what works or not. You must be patient to copy, paste, and ask again and again until you get the best version of the app you want to build. With coding, you can do anything: building a software that can help you do your work better. For example, if you are an engineer, you no longer need to use pencils or rulers because AI can do this much faster. This is Gesner AI talking about what I have recently learned from being patient with coding and building what I want, like my website and any other software I recently built. Please share my phone number and email to contact me, and then I will build whatever you want. Contact me at (509) 4738-5663 or deslandes78@gmail.com.";
             
             // --- Messages (only spoken on button click) ---
@@ -1040,13 +1059,13 @@ def humanoid_robot_page():
                 "Visit our website globalinternet.py to see our projects and services."
             ];
             
-            // Button click: speak a random message (first message is the new AI speech)
+            // Button click: speak a random message
             document.getElementById('speakBtn').addEventListener('click', () => {
                 const randomMsg = messageList[Math.floor(Math.random() * messageList.length)];
                 speakMessage(randomMsg);
             });
             
-            // Blink eyes periodically
+            // Blink eyes periodically (independent of speaking)
             function blinkEyes() {
                 leftPupil.scale.set(1, 0.05, 1);
                 rightPupil.scale.set(1, 0.05, 1);
